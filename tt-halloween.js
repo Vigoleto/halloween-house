@@ -2191,6 +2191,17 @@ addCSS(`
 .lab.min{width:auto}
 .lab.min .lab-hd{margin:0}
 .lab.min>:not(.lab-hd){display:none}
+.lab-launch{position:absolute;bottom:12px;left:12px;pointer-events:auto;border:1px solid #c19555;border-radius:50%;width:48px;height:48px;background:rgba(32,20,43,.95);color:#fff;font-size:24px;box-shadow:0 5px 20px #0009;cursor:pointer;display:none}
+.lab-launch:focus-visible{outline:2px solid #ff8a1f}
+@media(pointer:coarse), (max-width:700px){
+.lab{left:max(8px,env(safe-area-inset-left));bottom:max(8px,env(safe-area-inset-bottom));width:min(310px,calc(100vw - 16px));max-height:min(76dvh,620px);padding:10px;background:rgba(27,18,39,.94);border:1px solid #ad7c4c;backdrop-filter:blur(12px);font-size:13px}
+.lab-hd b{font-size:19px}.lab button{padding:9px 7px;min-height:40px}.lab .hb{min-width:35px;text-align:center}
+.lab-grid{gap:5px}.lab-row{gap:5px}.lab p{display:none}
+.lab.min{width:auto;padding:0;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+.lab.min .lab-hd{display:none}
+.lab.min .lab-launch{display:block;position:static}
+}
+
 `);
 function labSync() {
 	const b = ui.querySelector('[data-a=scare]');
@@ -2202,19 +2213,21 @@ function lab() {
 	const box = el('div', 'lab', ui);
 	box.setAttribute('role', 'dialog');
 	box.setAttribute('aria-label', 'Creature lab');
-	box.innerHTML = '<div class="lab-hd"><b>Creature lab</b><button class="hb" data-a="min" aria-label="Fold the lab away" aria-expanded="true">&minus;</button>'
+	box.innerHTML = '<button class="lab-launch" data-a="min" aria-label="Отвори лабораторията с чудовищата" title="Creature Lab">🕷️</button><div class="lab-hd"><b>Creature lab</b><button class="hb" data-a="min" aria-label="Fold the lab away" aria-expanded="true">&minus;</button>'
 		+ '<button class="hb" data-a="close" aria-label="Close the lab">&times;</button></div>'
 		+ '<div class="lab-grid">' + Object.keys(KINDS).map(k => '<button data-k="' + k + '">' + KINDS[k].name + '</button>').join('') + '</div>'
 		+ '<div class="lab-row"><button data-a="scare" aria-pressed="false">Next hit scares</button><button data-a="crowd">Quiet-spell watchers</button></div>'
 		+ '<div class="lab-row"><button data-a="frenzy">Frenzy</button><button data-a="clear">Clear the screen</button></div>'
 		+ '<p>Moderators only. Visitors get a creature 2&ndash;5 s after every page load, then about one every 50 s while they stay; a visitor\'s first hits always banish, after that a jump scare can come at most every 2&frac12; minutes.</p>';
-	box.addEventListener('click', e => {
+	function setLabMin(m) { box.classList.toggle('min',m);const btn=box.querySelector('.lab-hd [data-a=min]');btn.innerHTML=m?'+':'&minus;';btn.setAttribute('aria-expanded',String(!m)); }
+if (matchMedia('(pointer:coarse), (max-width:700px)').matches) setLabMin(true);
+box.addEventListener('click', e => {
 		const b = e.target.closest('button');
 		if (!b) return;
 		const a = b.dataset.a;
-		if (b.dataset.k) encounter(b.dataset.k);
-		else if (a === 'close') { box.remove(); if (location.hash === '#spooky-lab') history.replaceState(null, '', location.pathname + location.search); }
-		else if (a === 'min') { const m = box.classList.toggle('min'); b.innerHTML = m ? '+' : '&minus;'; b.setAttribute('aria-expanded', m ? 'false' : 'true'); }
+		if (b.dataset.k) { encounter(b.dataset.k); if (matchMedia('(pointer:coarse), (max-width:700px)').matches) setLabMin(true); }
+		else if (a === 'close') { setLabMin(true); }
+		else if (a === 'min') { setLabMin(!box.classList.contains('min')); }
 		else if (a === 'scare') { labScare = !labScare; labSync(); }
 		else if (a === 'crowd') crowd();
 		else if (a === 'frenzy') for (let i = 0; i < 4; i++) setTimeout(() => encounter(), i * 700);
