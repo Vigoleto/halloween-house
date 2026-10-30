@@ -2194,8 +2194,8 @@ addCSS(`
 .lab-launch{position:absolute;bottom:12px;left:12px;pointer-events:auto;border:1px solid #c19555;border-radius:50%;width:48px;height:48px;background:rgba(32,20,43,.95);color:#fff;font-size:24px;box-shadow:0 5px 20px #0009;cursor:pointer;display:none}
 .lab-launch:focus-visible{outline:2px solid #ff8a1f}
 @media(pointer:coarse), (max-width:700px){
-.lab{left:max(8px,env(safe-area-inset-left));bottom:max(8px,env(safe-area-inset-bottom));width:min(310px,calc(100vw - 16px));max-height:min(76dvh,620px);padding:10px;background:rgba(27,18,39,.94);border:1px solid #ad7c4c;backdrop-filter:blur(12px);font-size:13px}
-.lab-hd b{font-size:19px}.lab button{padding:9px 7px;min-height:40px}.lab .hb{min-width:35px;text-align:center}
+.lab{left:max(8px,env(safe-area-inset-left));bottom:max(8px,env(safe-area-inset-bottom));width:min(310px,calc(100vw - 16px));max-height:min(76dvh,620px);padding:10px;background:rgba(27,18,39,.72);border:1px solid rgba(215,157,90,.78);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);font-size:13px;color:#fff4e8}
+.lab-hd b{font-size:19px}.lab button{padding:9px 7px;min-height:40px;color:#fff5e9;background:rgba(77,54,85,.50);border-color:rgba(221,181,132,.62);text-shadow:0 1px 2px rgba(0,0,0,.55)}.lab button:hover,.lab button:active{background:rgba(116,70,98,.70)}.lab .hb{min-width:35px;text-align:center}
 .lab-grid{gap:5px}.lab-row{gap:5px}.lab p{display:none}
 .lab.min{width:auto;padding:0;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
 .lab.min .lab-hd{display:none}
